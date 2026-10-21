@@ -1,0 +1,17 @@
+{
+  "name": "bus-ticket-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Bus Ticket Booking application",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "mongoose": "^9.11.2"
+  }
+}
