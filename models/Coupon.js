@@ -33,4 +33,6 @@ const couponSchema = new mongoose.Schema(
   }
 );
 
+couponSchema.index({ isActive: 1 });
+
 module.exports = mongoose.model("Coupon", couponSchema);

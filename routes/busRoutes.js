@@ -1,14 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const Booking = require("../models/Booking");
+const { getCurrentTrip } = require("../utils/tripManager");
 
-// GET /api/bus - get bus schedule and availability
+// GET /api/bus - get bus schedule, availability, and active trip information
 router.get("/", async (req, res) => {
   try {
+    const currentTrip = await getCurrentTrip();
+
     const bookings = await Booking.find(
-      { status: { $ne: "cancelled" } },
+      { status: "confirmed" },
       "selectedSeats"
-    );
+    ).lean();
     const bookedSeats = Array.from(
       new Set(bookings.flatMap((b) => b.selectedSeats || []))
     );
@@ -23,6 +26,8 @@ router.get("/", async (req, res) => {
       totalSeats: 40,
       bookedSeats,
       seatsLeft: Math.max(0, 40 - bookedSeats.length),
+      currentTrip: currentTrip.tripId,
+      tripNumber: currentTrip.tripNumber,
       busPoints: [
         "Boarding Point - Laxmipur",
         "Dropping Point - Bogura",

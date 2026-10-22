@@ -13,14 +13,17 @@ const defaultCoupons = [
   { percentageOff: 40, date: "July 2026", couponCode: "PROMO40", backGroundColor: "#F472B6" },
 ];
 
-// Helper to seed defaults if DB is empty
+// Helper to seed defaults if DB is empty (cached in-memory for high performance)
+let isCouponsSeeded = false;
 const ensureSeedCoupons = async () => {
+  if (isCouponsSeeded) return;
   try {
     const count = await Coupon.countDocuments();
     if (count === 0) {
       await Coupon.insertMany(defaultCoupons);
       console.log("[Coupons] Seeded default coupons into database");
     }
+    isCouponsSeeded = true;
   } catch (err) {
     console.error("[Coupons Seed Error]:", err.message);
   }
@@ -30,7 +33,7 @@ const ensureSeedCoupons = async () => {
 router.get("/", async (req, res) => {
   try {
     await ensureSeedCoupons();
-    const coupons = await Coupon.find({ isActive: true });
+    const coupons = await Coupon.find({ isActive: true }).lean();
     return res.json({ success: true, count: coupons.length, coupons });
   } catch (error) {
     console.error("[Get Coupons Error]:", error);
@@ -51,7 +54,7 @@ router.post("/apply", async (req, res) => {
 
     await ensureSeedCoupons();
     // Search by uppercase and remove spaces for matching (e.g. "Couple 20" vs "COUPLE20")
-    const allCoupons = await Coupon.find({ isActive: true });
+    const allCoupons = await Coupon.find({ isActive: true }).lean();
     const coupon = allCoupons.find(
       (c) => c.couponCode.replace(/\s+/g, "").toUpperCase() === normalizedCode
     );

@@ -1,0 +1,193 @@
+{
+  "tripId": "Trip-1",
+  "tripNumber": 1,
+  "route": "Dhaka - Sylhet",
+  "completedAt": "2026-10-22T19:06:45.066Z",
+  "totalSeatsBooked": 40,
+  "totalRevenue": 18672,
+  "passengers": [
+    {
+      "bookingId": "6ad846e685c58cb4b0a1bbdb",
+      "passengerName": "Aphrodite Thornton",
+      "phoneNumber": "+1 (576) 204-2417",
+      "email": "hojejohok@mailinator.com",
+      "seats": [
+        "A1"
+      ],
+      "totalPrice": 550,
+      "couponCode": "None",
+      "bookedAt": "2026-10-21T05:00:22.569Z"
+    },
+    {
+      "bookingId": "6ad8473585c58cb4b0a1bbdc",
+      "passengerName": "Allegra Kelley",
+      "phoneNumber": "+1 (752) 686-9673",
+      "email": "banowycog@mailinator.com",
+      "seats": [
+        "A2",
+        "B1",
+        "B2"
+      ],
+      "totalPrice": 990,
+      "couponCode": "PROMO40",
+      "bookedAt": "2026-10-21T05:01:41.398Z"
+    },
+    {
+      "bookingId": "6ad85761f6f84cdecbb868b3",
+      "passengerName": "JAHANARA BEGUM",
+      "phoneNumber": "01612346789",
+      "email": "acbdrf@123gmail.com",
+      "seats": [
+        "A3",
+        "A4",
+        "D3",
+        "D4"
+      ],
+      "totalPrice": 1320,
+      "couponCode": "PROMO40",
+      "bookedAt": "2026-10-21T06:10:41.411Z"
+    },
+    {
+      "bookingId": "6ad859a1f6f84cdecbb868b4",
+      "passengerName": "ASDFFFC",
+      "phoneNumber": "01255452",
+      "email": "cafafafaf@23gmail.com",
+      "seats": [
+        "E1",
+        "J4"
+      ],
+      "totalPrice": 935,
+      "couponCode": "NEW15",
+      "bookedAt": "2026-10-21T06:20:17.298Z"
+    },
+    {
+      "bookingId": "6ad9a45c7bc31a8d46037d9b",
+      "passengerName": "NOMAN JAHAN",
+      "phoneNumber": "016235987456",
+      "email": "nomanjahan123@gmail.com",
+      "seats": [
+        "B3",
+        "B4",
+        "C4",
+        "C3"
+      ],
+      "totalPrice": 1320,
+      "couponCode": "PROMO40",
+      "bookedAt": "2026-10-22T05:51:24.295Z"
+    },
+    {
+      "bookingId": "6ad9a852e9f45e27b27890e8",
+      "passengerName": "HASAN",
+      "phoneNumber": "+1 (541) 438-9072",
+      "email": "12330@dti.ac",
+      "seats": [
+        "C1",
+        "H1",
+        "H2"
+      ],
+      "totalPrice": 1155,
+      "couponCode": "MEGA30",
+      "bookedAt": "2026-10-22T06:08:18.330Z"
+    },
+    {
+      "bookingId": "6ad9b40229e1de87542f6245",
+      "passengerName": "AMAR",
+      "phoneNumber": "2598764130",
+      "email": "sdfar@gamil.com",
+      "seats": [
+        "F3",
+        "F4"
+      ],
+      "totalPrice": 1100,
+      "couponCode": "None",
+      "bookedAt": "2026-10-22T06:58:10.566Z"
+    },
+    {
+      "bookingId": "6ada5ac7cc70b068138e3e95",
+      "passengerName": "Keefe Goff",
+      "phoneNumber": "+1 (137) 642-6822",
+      "email": "todafe@mailinator.com",
+      "seats": [
+        "F2",
+        "F1",
+        "G1"
+      ],
+      "totalPrice": 1402,
+      "couponCode": "NEW15",
+      "bookedAt": "2026-10-22T18:49:43.013Z"
+    },
+    {
+      "bookingId": "6ada5ad7cc70b068138e3e96",
+      "passengerName": "Akeem Carrillo",
+      "phoneNumber": "+1 (442) 527-5682",
+      "email": "kalex@mailinator.com",
+      "seats": [
+        "C2",
+        "D1",
+        "D2",
+        "E2"
+      ],
+      "totalPrice": 2200,
+      "couponCode": "None",
+      "bookedAt": "2026-10-22T18:49:59.940Z"
+    },
+    {
+      "bookingId": "6ada5aebb9990fafe36cbcc1",
+      "passengerName": "Mariam Dunn",
+      "phoneNumber": "+1 (112) 903-2037",
+      "email": "kebapat@mailinator.com",
+      "seats": [
+        "E3",
+        "E4",
+        "G2",
+        "G3"
+      ],
+      "totalPrice": 2200,
+      "couponCode": "None",
+      "bookedAt": "2026-10-22T18:50:19.535Z"
+    },
+    {
+      "bookingId": "6ada5af80893c8f03ac402f9",
+      "passengerName": "Hillary Reed",
+      "phoneNumber": "+1 (726) 692-1501",
+      "email": "qawib@mailinator.com",
+      "seats": [
+        "H3",
+        "G4",
+        "H4",
+        "I4"
+      ],
+      "totalPrice": 2200,
+      "couponCode": "None",
+      "bookedAt": "2026-10-22T18:50:32.700Z"
+    },
+    {
+      "bookingId": "6ada5b04cc70b068138e3e97",
+      "passengerName": "Teagan Reynolds",
+      "phoneNumber": "+1 (564) 362-7311",
+      "email": "gykapaduqi@mailinator.com",
+      "seats": [
+        "I1",
+        "I2",
+        "I3"
+      ],
+      "totalPrice": 1650,
+      "couponCode": "None",
+      "bookedAt": "2026-10-22T18:50:44.850Z"
+    },
+    {
+      "bookingId": "6ada5b94b9990fafe36cbcc2",
+      "passengerName": "Keelie Mclaughlin",
+      "phoneNumber": "+1 (727) 885-7448",
+      "email": "jesi@mailinator.com",
+      "seats": [
+        "J1",
+        "J2",
+        "J3"
+      ],
+      "totalPrice": 1650,
+      "couponCode": "None",
+      "bookedAt": "2026-10-22T18:53:08.209Z"
+    }
+  ]
+}

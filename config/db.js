@@ -1,33 +1,47 @@
 const mongoose = require("mongoose");
 
+let cached = global.mongoose;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 const connectDB = async () => {
-  try {
-    const uri = process.env.MONGODB_URI;
-    if (!uri) {
-      throw new Error("MONGODB_URI is not defined in environment variables");
-    }
+  if (cached.conn && mongoose.connection.readyState === 1) {
+    return cached.conn;
+  }
 
-    const options = {
-      dbName: process.env.MONGODB_DB_NAME || "busticket",
-      serverSelectionTimeoutMS: 5000,
-    };
-
-    const conn = await mongoose.connect(uri, options);
-    console.log(`[Database] MongoDB Connected: ${conn.connection.host} (DB: ${conn.connection.name})`);
-    return conn;
-  } catch (error) {
-    console.error(`[Database Error] ${error.message}`);
-    // Don't crash immediately so API can report status, but log clearly
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    console.error("[Database Error] MONGODB_URI is not defined in environment variables");
     return null;
   }
+
+  if (!cached.promise) {
+    const options = {
+      dbName: process.env.MONGODB_DB_NAME || "busticket",
+      serverSelectionTimeoutMS: 8000,
+      bufferCommands: false, // Don't buffer commands indefinitely
+    };
+
+    cached.promise = mongoose
+      .connect(uri, options)
+      .then((m) => {
+        console.log(`[Database] MongoDB Connected: ${m.connection.host} (DB: ${m.connection.name})`);
+        return m;
+      })
+      .catch((err) => {
+        console.error(`[Database Error] ${err.message}`);
+        cached.promise = null;
+        return null;
+      });
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 };
 
 mongoose.connection.on("disconnected", () => {
   console.warn("[Database] MongoDB disconnected");
-});
-
-mongoose.connection.on("reconnected", () => {
-  console.log("[Database] MongoDB reconnected");
 });
 
 module.exports = connectDB;

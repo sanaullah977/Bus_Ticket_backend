@@ -1,14 +1,48 @@
 const express = require("express");
 const router = express.Router();
 const Booking = require("../models/Booking");
+const {
+  getCurrentTrip,
+  archiveCurrentTripAndStartNext,
+} = require("../utils/tripManager");
 
-// GET /api/bookings/booked-seats - list all currently reserved/booked seat identifiers
+// POST /api/bookings/reset - archive current trip to Trip database & folder, mark bookings completed, reset seats for resale
+router.post("/reset", async (req, res) => {
+  try {
+    const result = await archiveCurrentTripAndStartNext();
+    const message = result.savedTrip
+      ? `Trip ${result.savedTrip} archived successfully! Resale seats ready for ${result.nextTrip}. Previous data is 100% preserved.`
+      : result.message || "All seats are already available for booking.";
+
+    return res.json({
+      success: true,
+      message,
+      ...result,
+    });
+  } catch (error) {
+    console.error("[Reset Bookings Error]:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// GET /api/bookings/current-trip - get active trip metadata
+router.get("/current-trip", async (req, res) => {
+  try {
+    const current = await getCurrentTrip();
+    return res.json({ success: true, ...current });
+  } catch (error) {
+    console.error("[Get Current Trip Error]:", error);
+    return res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// GET /api/bookings/booked-seats - list currently active booked seats for the active trip
 router.get("/booked-seats", async (req, res) => {
   try {
     const bookings = await Booking.find(
-      { status: { $ne: "cancelled" } },
+      { status: "confirmed" },
       "selectedSeats"
-    );
+    ).lean();
     const bookedSeats = bookings.flatMap((b) => b.selectedSeats || []);
     const uniqueBookedSeats = Array.from(new Set(bookedSeats));
     return res.json({ success: true, bookedSeats: uniqueBookedSeats });
@@ -18,10 +52,17 @@ router.get("/booked-seats", async (req, res) => {
   }
 });
 
-// GET /api/bookings - list all bookings
+// GET /api/bookings - list all bookings (supports ?tripId=Trip-1 filter)
 router.get("/", async (req, res) => {
   try {
-    const bookings = await Booking.find().sort({ createdAt: -1 });
+    const filter = {};
+    if (req.query.tripId) {
+      filter.tripId = req.query.tripId;
+    }
+    if (req.query.status) {
+      filter.status = req.query.status;
+    }
+    const bookings = await Booking.find(filter).sort({ createdAt: -1 }).lean();
     return res.json({ success: true, count: bookings.length, bookings });
   } catch (error) {
     console.error("[Get Bookings Error]:", error);
@@ -43,7 +84,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// POST /api/bookings - create a new booking
+// POST /api/bookings - create a new booking in the current active trip
 router.post("/", async (req, res) => {
   try {
     const {
@@ -89,9 +130,9 @@ router.post("/", async (req, res) => {
       });
     }
 
-    // Check if any seat is already booked
+    // Check if any seat is already booked for active trip
     const existing = await Booking.find({
-      status: { $ne: "cancelled" },
+      status: "confirmed",
       selectedSeats: { $in: selectedSeats },
     });
 
@@ -104,14 +145,26 @@ router.post("/", async (req, res) => {
       });
     }
 
+    // Get current active trip
+    const currentTrip = await getCurrentTrip();
+
+    const pricePerSeat = Number(seatPrice) || 550;
+    const computedTotal = (selectedSeats.length || 0) * pricePerSeat;
+    const finalTotalPrice =
+      totalPrice !== undefined && totalPrice !== null
+        ? Number(totalPrice)
+        : Math.max(0, computedTotal - (Number(discount) || 0));
+
     const newBooking = new Booking({
+      tripId: currentTrip.tripId,
+      tripNumber: currentTrip.tripNumber,
       passengerName: passengerName.trim(),
       phoneNumber: phoneNumber.trim(),
       email: email ? email.trim() : "",
       selectedSeats,
-      seatPrice: seatPrice || 550,
-      discount: discount || 0,
-      totalPrice: totalPrice,
+      seatPrice: pricePerSeat,
+      discount: Number(discount) || 0,
+      totalPrice: finalTotalPrice,
       couponCode: couponCode || "",
       busName: busName || "P.H Paribahan",
       coach: coach || "Coach-009-WEB ! AC_Business",
@@ -125,6 +178,7 @@ router.post("/", async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Ticket booked successfully!",
+      tripId: currentTrip.tripId,
       booking: saved,
     });
   } catch (error) {

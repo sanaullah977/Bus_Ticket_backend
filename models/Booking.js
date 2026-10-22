@@ -62,13 +62,28 @@ const bookingSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["confirmed", "pending", "cancelled"],
+      enum: ["confirmed", "pending", "cancelled", "completed"],
       default: "confirmed",
+    },
+    tripId: {
+      type: String,
+      default: "Trip-1",
+      trim: true,
+    },
+    tripNumber: {
+      type: Number,
+      default: 1,
     },
   },
   {
     timestamps: true,
   }
 );
+
+// Performance indexes for ultra-fast query execution & seat availability checks
+bookingSchema.index({ status: 1 });
+bookingSchema.index({ tripId: 1, status: 1 });
+bookingSchema.index({ tripNumber: -1 });
+bookingSchema.index({ selectedSeats: 1, status: 1 });
 
 module.exports = mongoose.model("Booking", bookingSchema);
